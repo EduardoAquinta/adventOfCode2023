@@ -1,9 +1,31 @@
 const collectCalibration = (input) => 
 {
-    let firstNumber = findFirstNumberInString(input)
-    let numberFromString = convertStringToNumber(firstNumber) 
+    let fullStringNumber = ""
+    let total = 0;
 
-    return numberFromString;
+    if(typeof(input) === "string")
+    {
+        fullStringNumber = createFullNumber(input)
+        total += convertStringToNumber(fullStringNumber)
+    }
+
+    if(Array.isArray(input) === true)
+    {
+        input.forEach(elem => {
+            fullStringNumber = createFullNumber(elem);
+            total += convertStringToNumber(fullStringNumber)
+        })
+    }
+    return total;
+}
+
+const createFullNumber = (input) => 
+{
+    let firstNumber = findFirstNumber(input)
+    let lastNumber = findLastNumber(input)
+    let fullNumber = firstNumber + lastNumber;
+
+    return fullNumber;
 }
 
 const convertStringToNumber = (string) => 
@@ -11,10 +33,22 @@ const convertStringToNumber = (string) =>
     return Number(string)
 }
 
-const findFirstNumberInString = (string) => 
+const findFirstNumber = (string) => 
 {
-    const regex = /[0-9]+/
-    return string.match(regex)
+    const regex = /\d+/g
+    let firstNumber = string.match(regex)[0].substring(0,1)
+
+    return firstNumber
 }
 
-module.exports = collectCalibration;
+const findLastNumber = (string) => 
+{
+    const regex = /\d+/g
+    let numbers = string.match(regex)
+    let numbersString = numbers.join("")
+    let lastNumber = numbersString.substring(numbersString.length - 1)
+
+    return lastNumber
+}
+
+module.exports = collectCalibration, findFirstNumber, findLastNumber, convertStringToNumber;
